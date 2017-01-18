@@ -197,19 +197,29 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 			$remove_from_all_segment	= false;
 			$give_options = AMPW_Mautic_Init::get_amp_options();
 			$give_gateway	= array_key_exists( 'amp_give_gateway', $give_options ) ? $give_options['amp_give_gateway'] : '';
+			
 			$give_payment = array_key_exists( 'amp_give_payment', $give_options ) ? $give_options['amp_give_payment'] : '';
+			
 			$give_form_tag	= array_key_exists( 'amp_give_form_tag', $give_options ) ? $give_options['amp_give_form_tag'] : '';
 
 			$seg_action_id = array_key_exists( 'config_give_segment', $give_options ) ? $give_options['config_give_segment'] : '';
+			
 			$seg_action_failed = array_key_exists( 'config_give_segment_failed', $give_options ) ? $give_options['config_give_segment_failed'] : '';
+			
 			$seg_action_refund = array_key_exists( 'config_give_segment_refund', $give_options ) ? $give_options['config_give_segment_refund'] : '';
+			
 			$seg_action_cancel = array_key_exists( 'config_give_segment_cancel', $give_options ) ? $give_options['config_give_segment_cancel'] : '';
+			
 			$seg_action_pending = array_key_exists( 'config_give_segment_pending', $give_options ) ? $give_options['config_give_segment_pending'] : '';
+			
 			$seg_action_revoked = array_key_exists( 'config_give_segment_revoked', $give_options ) ? $give_options['config_give_segment_revoked'] : '';
+			
 			$seg_action_ab = array_key_exists( 'config_give_segment_ab', $give_options ) ? $give_options['config_give_segment_ab'] : '';
+			
 			$seg_action_form = array_key_exists( 'config_give_segment_form', $give_options ) ? $give_options['config_give_segment_form'] : '';
-
+			
 			$give_form = array_key_exists( 'config_give_form', $give_options ) ? $give_options['config_give_form'] : '';
+			
 
 			if ( array_key_exists( 'apm_give_remove_segment', $give_options ) ) {
 				
@@ -398,23 +408,68 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 				$give_options = AMPW_Mautic_Init::get_amp_options();
 				$give_options['amp_give_gateway'] = $give_options['amp_give_payment'] = $give_options['amp_give_form_tag'] = $give_options['amp_give_proactive_abandoned'] = $give_options['apm_give_remove_segment'] = false;
 
-				if( isset( $_POST['amp_give_gateway'] ) ) {	$give_options['amp_give_gateway'] = true;	}
-				if( isset( $_POST['amp_give_payment'] ) ) {	$give_options['amp_give_payment'] = true;	}
-				if( isset( $_POST['amp_give_form_tag'] ) ) {	$give_options['amp_give_form_tag'] = true;	}
-				if( isset( $_POST['amp_give_proactive_abandoned'] ) ) {	$give_options['amp_give_proactive_abandoned'] = true;	}
-				if( isset( $_POST['apm_give_remove_segment'] ) ) {	$give_options['apm_give_remove_segment'] = true;	}
-				if( isset( $_POST['remove_segment_ap'] ) ) {	$give_options['remove_segment_ap'] = true;	}
+				if( isset( $_POST['amp_give_gateway'] ) ) {	
+					
+					$give_options['amp_give_gateway'] = true;
+				}
+				
+				if( isset( $_POST['amp_give_payment'] ) ) {	
+					
+					$give_options['amp_give_payment'] = true;
+				}
+				if( isset( $_POST['amp_give_form_tag'] ) ) {	
+					$give_options['amp_give_form_tag'] = true;	
+				}
+				if( isset( $_POST['amp_give_proactive_abandoned'] ) ) {	
+						
+						$give_options['amp_give_proactive_abandoned'] = true;	
+					}
+				if( isset( $_POST['apm_give_remove_segment'] ) ) {	
+						
+						$give_options['apm_give_remove_segment'] = true;	
+					}
+				if( isset( $_POST['remove_segment_ap'] ) ) {	
+						
+						$give_options['remove_segment_ap'] = true;	
+					}
 
-				if( isset( $_POST['ss_seg_action'][0] ) ) {	$give_options['config_give_segment'] = $_POST['ss_seg_action'][0]; }
-				if( isset( $_POST['ss_seg_action'][1] ) ) {	$give_options['config_give_segment_failed'] = $_POST['ss_seg_action'][1]; }
-				if( isset( $_POST['ss_seg_action'][2] ) ) {	$give_options['config_give_segment_revoked'] = $_POST['ss_seg_action'][2]; }
-				if( isset( $_POST['ss_seg_action'][3] ) ) {	$give_options['config_give_segment_ab'] = $_POST['ss_seg_action'][3]; }
-				if( isset( $_POST['ss_seg_action'][4] ) ) {	$give_options['config_give_segment_pending'] = $_POST['ss_seg_action'][4]; }
-				if( isset( $_POST['ss_seg_action'][5] ) ) {	$give_options['config_give_segment_refund'] = $_POST['ss_seg_action'][5]; }
-				if( isset( $_POST['ss_seg_action'][6] ) ) {	$give_options['config_give_segment_cancel'] = $_POST['ss_seg_action'][6]; }
-				if( isset( $_POST['ss_seg_action'][7] ) ) {	$give_options['config_give_segment_form'] = $_POST['ss_seg_action'][7]; }
+				if( isset( $_POST['ss_seg_action'][0] ) ) {	
+						
+						$give_options['config_give_segment'] = sanitize_text_field( $_POST['ss_seg_action'][0] );
+					}
+				if( isset( $_POST['ss_seg_action'][1] ) ) {	
+						
+						$give_options['config_give_segment_failed'] = sanitize_text_field( $_POST['ss_seg_action'][1] );
+					}
+				if( isset( $_POST['ss_seg_action'][2] ) ) {	
+						
+						$give_options['config_give_segment_revoked'] = sanitize_text_field( $_POST['ss_seg_action'][2] );
+					}
+				if( isset( $_POST['ss_seg_action'][3] ) ) {	
+						
+						$give_options['config_give_segment_ab'] = sanitize_text_field( $_POST['ss_seg_action'][3] );
+					}
+				if( isset( $_POST['ss_seg_action'][4] ) ) {	
+						
+						$give_options['config_give_segment_pending'] = sanitize_text_field( $_POST['ss_seg_action'][4] );
+					}
+				if( isset( $_POST['ss_seg_action'][5] ) ) {	
+						
+						$give_options['config_give_segment_refund'] = sanitize_text_field( $_POST['ss_seg_action'][5] );
+					}
+				if( isset( $_POST['ss_seg_action'][6] ) ) {	
+						
+						$give_options['config_give_segment_cancel'] = sanitize_text_field( $_POST['ss_seg_action'][6] );
+					}
+				if( isset( $_POST['ss_seg_action'][7] ) ) {	
+						
+						$give_options['config_give_segment_form'] = sanitize_text_field( $_POST['ss_seg_action'][7] );
+					}
 
-				if( isset( $_POST['sub_give_forms'] ) ) {	$give_options['config_give_form'] = $_POST['sub_give_forms']; }
+				if( isset( $_POST['sub_give_forms'] ) ) {	
+
+						$give_options['config_give_form'] = sanitize_text_field( $_POST['sub_give_forms'] ); 
+				}
 
 				update_option( 'ampw_mautic_config', $give_options );
 				
