@@ -40,6 +40,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 		public static function instance() {
 
 			if ( ! isset( self::$instance ) ) {
+
 				self::$instance = new APMautic_Give();
 				self::$instance->hooks();
 			}
@@ -49,6 +50,9 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 		public function hooks() {
 
 			if ( class_exists( 'Give' ) && class_exists( 'AutomatePlus_Mautic' ) ) {
+
+				self::set_constants();
+				self::includes();
 
 				add_action( 'admin_enqueue_scripts', array( $this, 'apm_give_styles_scripts' ) );
 
@@ -67,12 +71,8 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 				add_action( 'amp_update_tab_content', array( $this, 'update_give_tab_content' ) );
 				
 				add_filter( 'update_footer', array( $this, 'send_customers'), 199 );
-
-				self::set_constants();
-				self::includes();
 			}
 			else {
-
 				add_action( 'admin_notices', array( $this, 'apm_give_notices' ), 1000);
 				add_action( 'network_admin_notices', array( $this, 'apm_give_notices' ), 1000);
 			}
@@ -99,6 +99,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 		}
 
 		public function apm_give_notices() {
+			
 			if ( ! class_exists( 'AutomatePlus_Mautic' ) ) {
 
 				$url = network_admin_url() . 'plugin-install.php?s=AutomatePlus+-+Mautic+for+WordPress&tab=search';
@@ -700,5 +701,5 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 			}
 		}
 } // end of class
-add_action( 'plugin_loaded', 'APMautic_Give::instance' );
+add_action( 'plugins_loaded', 'APMautic_Give::instance' );
 endif;
