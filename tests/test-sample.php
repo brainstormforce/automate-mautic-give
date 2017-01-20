@@ -2,7 +2,7 @@
 /**
  * Class SampleTest
  *
- * @package Automate_Mautic_Give
+ * @package automateplus-mautic-give
  */
 
 /**

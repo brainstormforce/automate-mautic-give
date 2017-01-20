@@ -8,7 +8,7 @@
  * Author URI: http://www.brainstormforce.com/
  * Text Domain: automateplus-mautic-give
  *
- * @package AutomatePlus - Mautic for Give
+ * @package automateplus-mautic-give
  * @author Brainstorm Force
  */
 

@@ -2,7 +2,7 @@
 /**
  * Give admin ajax.
  *
- * @package AutomatePlus - Mautic for Give
+ * @package automateplus-mautic-give
  * @since 1.0.0
  */
 

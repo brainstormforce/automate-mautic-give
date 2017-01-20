@@ -2,7 +2,7 @@
 /**
  * PHPUnit bootstrap file
  *
- * @package Automate_Mautic_Give
+ * @package automateplus-mautic-give
  */
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
