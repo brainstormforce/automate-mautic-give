@@ -55,7 +55,7 @@ if ( ! class_exists( 'AutomatePlusGiveAjax' ) ) :
 		 * @since 1.0.0
 		 * @return void
 		 */
-		public static function import_donors_to_mautic() {
+		public function import_donors_to_mautic() {
 
 			$obj_payments = new Give_Payments_Query();
 
@@ -77,7 +77,7 @@ if ( ! class_exists( 'AutomatePlusGiveAjax' ) ) :
 		 * @since 1.0.0
 		 * @return void
 		 */
-		public static function add_proactive_abandoned_leads() {
+		public function add_proactive_abandoned_leads() {
 
 			$give_options = AMPW_Mautic_Init::get_amp_options();
 			$seg_action_ab = array_key_exists( 'config_give_segment_ab', $give_options ) ? $give_options['config_give_segment_ab'] : '';

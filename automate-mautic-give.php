@@ -474,6 +474,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 		 * Update tab content
 		 *
 		 * @since 1.0.0
+		 * @static
 		 * @return void
 		 */
 		public static function update_give_tab_content() {
@@ -596,6 +597,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 		 * Remove contact from all segments
 		 *
 		 * @since 1.0.0
+		 * @static
 	  	 * @param string $email contact email.
 		 * @return void
 		 */
@@ -630,13 +632,14 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 		 * Get Mautic contact ID by email
 		 *
 		 * @since 1.0.0
+		 *
+		 * @static
 		 * @param string $email contact email.
 		 * @return int
 		 */
 		public static function get_mautic_contact_id( $email ) {
 
 			$credentials = AMPW_Mautic_Init::get_mautic_credentials();
-			$data = array();
 
 			if ( isset( $_COOKIE['mtc_id'] ) ) {
 
