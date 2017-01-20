@@ -1,26 +1,47 @@
 <?php
 /**
- * admin ajax functions.
+ * Give admin ajax.
  *
+ * @package AutomatePlus - Mautic for Give
  * @since 1.0.0
  */
-if ( ! class_exists( 'AutomatePlusWooAjax' ) ) :
 
-	class AutomatePlusWooAjax {
+if ( ! class_exists( 'AutomatePlusGiveAjax' ) ) :
 
+	/**
+	 * Initiator
+	 * Create class APMautic_Give
+	 * Handles Ajax operations
+	 */
+	class AutomatePlusGiveAjax {
+
+		/**
+		 * Declare a static variable instance.
+		 *
+		 * @var instance
+		 */
 		private static $instance;
 
 		/**
-		 * Initiator
+		 * Initiate class
+		 *
+		 * @since 1.0.0
+		 * @return class instance
 		 */
 		public static function instance() {
 			if ( ! isset( self::$instance ) ) {
-				self::$instance = new AutomatePlusWooAjax();
+				self::$instance = new AutomatePlusGiveAjax();
 				self::$instance->hooks();
 			}
 			return self::$instance;
 		}
 
+		/**
+		 * Call hooks
+		 *
+		 * @since 1.0.0
+		 * @return void
+		 */
 		public function hooks() {
 			add_action( 'wp_ajax_import_apm_give_donors', array( $this, 'import_donors_to_mautic' ) );
 
@@ -36,11 +57,11 @@ if ( ! class_exists( 'AutomatePlusWooAjax' ) ) :
 		 */
 		public static function import_donors_to_mautic() {
 
-			$give_Payments_Query = new Give_Payments_Query();
+			$obj_payments = new Give_Payments_Query();
 
-			$payments = $give_Payments_Query->get_payments();
+			$payments = $obj_payments->get_payments();
 
-			// loop through all donations
+			// loop through all donations.
 			foreach ( $payments as $payment ) {
 
 				$payment_id = $payment->ID;
@@ -60,7 +81,7 @@ if ( ! class_exists( 'AutomatePlusWooAjax' ) ) :
 
 			$give_options = AMPW_Mautic_Init::get_amp_options();
 			$seg_action_ab = array_key_exists( 'config_give_segment_ab', $give_options ) ? $give_options['config_give_segment_ab'] : '';
-			// General global config conditions
+			// General global config conditions.
 			$customer_ab = array(
 			'add_segment' => array(),
 			'remove_segment' => array(),
@@ -74,7 +95,7 @@ if ( ! class_exists( 'AutomatePlusWooAjax' ) ) :
 			$method = $api_data['method'];
 
 			$body = array(
-			'email'		=> $ab_email,
+				'email'		=> $ab_email,
 			);
 
 			$ab_segment = $customer_ab['add_segment'];
@@ -86,5 +107,5 @@ if ( ! class_exists( 'AutomatePlusWooAjax' ) ) :
 			wp_send_json_success( $result );
 		}
 	}
-	$AutomatePlusWooAjax = AutomatePlusWooAjax::instance();
+	$automate_give = AutomatePlusGiveAjax::instance();
 endif;

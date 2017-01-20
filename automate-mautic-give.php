@@ -12,13 +12,6 @@
  * @author Brainstorm Force
  */
 
-/**
- * Initiate plugin
- *
- * @package AutomatePlus - Mautic for Give
- * @since 1.0.0
- */
-
 // exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit();
@@ -33,7 +26,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 	class APMautic_Give {
 
 		/**
-		 * Declaring a static variable instance.
+		 * Declare a static variable instance.
 		 *
 		 * @var instance
 		 */
