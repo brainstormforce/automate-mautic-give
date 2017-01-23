@@ -86,8 +86,8 @@ if ( ! class_exists( 'AutomatePlusGiveAjax' ) ) :
 			'add_segment' => array(),
 			'remove_segment' => array(),
 			);
-			array_push( $customer_ab['add_segment'], $seg_action_ab );
 
+			$customer_ab['add_segment'][0] = $seg_action_ab;
 			$ab_email = isset( $_POST['email'] ) ? sanitize_email( $_POST['email'] ) : '';
 
 			$api_data = AP_Mautic_Api::get_api_method_url( $ab_email );
@@ -98,9 +98,7 @@ if ( ! class_exists( 'AutomatePlusGiveAjax' ) ) :
 				'email'		=> $ab_email,
 			);
 
-			$ab_segment = $customer_ab['add_segment'];
-
-			if ( sizeof( $ab_segment ) > 0 ) {
+			if ( ! empty( $customer_ab['add_segment'] ) ) {
 
 				$result = AP_Mautic_Api::ampw_mautic_api_call( $url, $method, $body, $customer_ab );
 			}
