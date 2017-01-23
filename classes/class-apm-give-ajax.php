@@ -79,8 +79,8 @@ if ( ! class_exists( 'AutomatePlusGiveAjax' ) ) :
 		 */
 		public function add_proactive_abandoned_leads() {
 
-			$give_options = AMPW_Mautic_Init::get_amp_options();
-			$seg_action_ab = array_key_exists( 'config_give_segment_ab', $give_options ) ? $give_options['config_give_segment_ab'] : '';
+			$seg_action_ab = apm_get_option( 'config_give_segment_ab' );
+
 			// General global config conditions.
 			$customer_ab = array(
 			'add_segment' => array(),

@@ -167,18 +167,14 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 		 */
 		public function give_abandoned_tracking() {
 
-			$options = AMPW_Mautic_Init::get_amp_options();
 			$enable_proact_tracking	= false;
 
-			if ( isset( $options['amp_give_proactive_abandoned'] ) ) {
+			if ( 1 == apm_get_option( 'amp_give_proactive_abandoned' ) ) {
 
-				if ( 1 == $options['amp_give_proactive_abandoned'] ) {
+				$enable_proact_tracking = true;
+			} else {
 
-					$enable_proact_tracking = true;
-				} else {
-
-					$enable_proact_tracking = false;
-				}
+				$enable_proact_tracking = false;
 			}
 
 			if ( $enable_proact_tracking ) {
@@ -256,50 +252,43 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 
 			$remove_from_all_segment	= false;
 
-			$give_options = AMPW_Mautic_Init::get_amp_options();
+			$give_gateway = apm_get_option( 'amp_give_gateway' );
 
-			$give_gateway	= array_key_exists( 'amp_give_gateway', $give_options ) ? $give_options['amp_give_gateway'] : '';
+			$give_payment = apm_get_option( 'amp_give_payment' );
 
-			$give_payment = array_key_exists( 'amp_give_payment', $give_options ) ? $give_options['amp_give_payment'] : '';
+			$give_form_tag	= apm_get_option( 'amp_give_form_tag' );
 
-			$give_form_tag	= array_key_exists( 'amp_give_form_tag', $give_options ) ? $give_options['amp_give_form_tag'] : '';
+			$seg_action_id = apm_get_option( 'config_give_segment' );
 
-			$seg_action_id = array_key_exists( 'config_give_segment', $give_options ) ? $give_options['config_give_segment'] : '';
+			$seg_action_failed = apm_get_option( 'config_give_segment_failed' );
 
-			$seg_action_failed = array_key_exists( 'config_give_segment_failed', $give_options ) ? $give_options['config_give_segment_failed'] : '';
+			$seg_action_refund = apm_get_option( 'config_give_segment_refund' );
 
-			$seg_action_refund = array_key_exists( 'config_give_segment_refund', $give_options ) ? $give_options['config_give_segment_refund'] : '';
+			$seg_action_cancel = apm_get_option( 'config_give_segment_cancel' );
 
-			$seg_action_cancel = array_key_exists( 'config_give_segment_cancel', $give_options ) ? $give_options['config_give_segment_cancel'] : '';
+			$seg_action_pending = apm_get_option( 'config_give_segment_pending' );
 
-			$seg_action_pending = array_key_exists( 'config_give_segment_pending', $give_options ) ? $give_options['config_give_segment_pending'] : '';
+			$seg_action_revoked = apm_get_option( 'config_give_segment_revoked' );
 
-			$seg_action_revoked = array_key_exists( 'config_give_segment_revoked', $give_options ) ? $give_options['config_give_segment_revoked'] : '';
+			$seg_action_ab = apm_get_option( 'config_give_segment_ab' );
 
-			$seg_action_ab = array_key_exists( 'config_give_segment_ab', $give_options ) ? $give_options['config_give_segment_ab'] : '';
+			$seg_action_form = apm_get_option( 'config_give_segment_form' );
 
-			$seg_action_form = array_key_exists( 'config_give_segment_form', $give_options ) ? $give_options['config_give_segment_form'] : '';
+			$give_form = apm_get_option( 'config_give_form' );
 
-			$give_form = array_key_exists( 'config_give_form', $give_options ) ? $give_options['config_give_form'] : '';
+			if ( 1 == apm_get_option( 'apm_give_remove_segment' ) ) {
 
-			if ( array_key_exists( 'apm_give_remove_segment', $give_options ) ) {
+				$remove_from_all_segment = true;
 
-				if ( 1 == $give_options['apm_give_remove_segment'] ) {
-
-					$remove_from_all_segment = true;
-				} else {
-					$remove_from_all_segment = false;
-				}
+			} else {
+				$remove_from_all_segment = false;
 			}
 
-			if ( array_key_exists( 'remove_segment_ap', $give_options ) ) {
+			if ( 1 == apm_get_option( 'remove_segment_ap' ) ) {
 
-				if ( 1 == $give_options['remove_segment_ap'] ) {
-
-					$remove_from_segment_purchase = true;
-				} else {
-					$remove_from_segment_purchase = false;
-				}
+				$remove_from_segment_purchase = true;
+			} else {
+				$remove_from_segment_purchase = false;
 			}
 
 			// General global config conditions.
@@ -482,7 +471,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 			if ( isset( $_POST['amp-mautic-nonce-give'] ) && wp_verify_nonce( $_POST['amp-mautic-nonce-give'], 'ampmauticgive' ) ) {
 
 				$give_options = AMPW_Mautic_Init::get_amp_options();
-				$give_options['amp_give_gateway'] = $give_options['amp_give_payment'] = $give_options['amp_give_form_tag'] = $give_options['amp_give_proactive_abandoned'] = $give_options['apm_give_remove_segment'] = false;
+				$give_options['amp_give_gateway'] = $give_options['amp_give_payment'] = $give_options['amp_give_form_tag'] = $give_options['amp_give_proactive_abandoned'] = $give_options['apm_give_remove_segment'] = $give_options['remove_segment_ap'] = false;
 
 				if ( isset( $_POST['amp_give_gateway'] ) ) {
 
@@ -564,11 +553,12 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 		 */
 		public function get_tags_by_payment( $payment_id ) {
 
-			$give_options = AMPW_Mautic_Init::get_amp_options();
-			$give_gateway = array_key_exists( 'amp_give_gateway', $give_options ) ? $give_options['amp_give_gateway'] : '';
-			$give_payment	= array_key_exists( 'amp_give_payment', $give_options ) ? $give_options['amp_give_payment'] : '';
-			$give_form	= array_key_exists( 'amp_give_form_tag', $give_options ) ? $give_options['amp_give_form_tag'] : '';
-			$m_tags = '';
+			$give_form	= apm_get_option( 'amp_give_form_tag' );
+
+			$give_gateway = apm_get_option( 'amp_give_gateway' );
+
+			$give_payment	= apm_get_option( 'amp_give_payment' );
+
 			// get form name.
 			if ( $give_form ) {
 
@@ -576,18 +566,18 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 				$m_tags .= $form_title . ',';
 			}
 
-			// get payment mode.
-			if ( $give_payment ) {
-
-				$payment_mode = get_post_meta( $payment_id, '_give_payment_mode', true );
-				$m_tags .= $payment_mode . ',';
-			}
-
 			// get payment gateway.
 			if ( $give_gateway ) {
 
 				$payment_gateway = get_post_meta( $payment_id, '_give_payment_gateway', true );
 				$m_tags .= $payment_gateway . ',';
+			}
+
+			// get payment mode.
+			if ( $give_payment ) {
+
+				$payment_mode = get_post_meta( $payment_id, '_give_payment_mode', true );
+				$m_tags .= $payment_mode . ',';
 			}
 
 			return $m_tags;
@@ -668,26 +658,35 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 
 			if ( 'give_mautic' == $active ) {
 
-					$give_options = AMPW_Mautic_Init::get_amp_options();
+					$give_gateway	= apm_get_option( 'amp_give_gateway' );
 
-					$give_gateway	= ( array_key_exists( 'amp_give_gateway', $give_options ) && 1 == $give_options['amp_give_gateway'] )  ? 'checked' :'';
-					$give_payment = ( array_key_exists( 'amp_give_payment', $give_options ) && 1 == $give_options['amp_give_payment'] )  ? 'checked' : '';
-					$give_form_tag	= ( array_key_exists( 'amp_give_form_tag', $give_options ) && 1 == $give_options['amp_give_form_tag'] )  ? 'checked' : '';
+					$give_payment = apm_get_option( 'amp_give_payment' );
 
-					$proactive_tracking = ( array_key_exists( 'amp_give_proactive_abandoned', $give_options ) && 1 == $give_options['amp_give_proactive_abandoned'] )  ? ' checked' : '';
-					$apm_give_remove_segment = ( array_key_exists( 'apm_give_remove_segment', $give_options ) && 1 == $give_options['apm_give_remove_segment'] )  ? ' checked' : '';
-					$remove_segment_ap = ( array_key_exists( 'remove_segment_ap', $give_options ) && 1 == $give_options['remove_segment_ap'] )  ? ' checked' : '';
+					$give_form_tag	= apm_get_option( 'amp_give_form_tag' );
 
-					$ss_seg_action = ( array_key_exists( 'config_give_segment', $give_options ) ) ? $give_options['config_give_segment'] : '';
-					$ss_seg_action_failed = ( array_key_exists( 'config_give_segment_failed', $give_options ) ) ? $give_options['config_give_segment_failed'] : '';
-					$ss_seg_action_refund = ( array_key_exists( 'config_give_segment_refund', $give_options ) ) ? $give_options['config_give_segment_refund'] : '';
-					$ss_seg_action_cancel = ( array_key_exists( 'config_give_segment_cancel', $give_options ) ) ? $give_options['config_give_segment_cancel'] : '';
-					$ss_seg_action_pending = ( array_key_exists( 'config_give_segment_pending', $give_options ) ) ? $give_options['config_give_segment_pending'] : '';
-					$ss_seg_action_revoked = ( array_key_exists( 'config_give_segment_revoked', $give_options ) ) ? $give_options['config_give_segment_revoked'] : '';
-					$ss_seg_action_hold = ( array_key_exists( 'config_give_segment_ab', $give_options ) ) ? $give_options['config_give_segment_ab'] : '';
+					$proactive_tracking = apm_get_option( 'amp_give_proactive_abandoned' );
 
-					$seg_action_form = ( array_key_exists( 'config_give_segment_form', $give_options ) ) ? $give_options['config_give_segment_form'] :'';
-					$give_form = array_key_exists( 'config_give_form', $give_options ) ? $give_options['config_give_form'] : '';
+					$apm_give_remove_segment = apm_get_option( 'apm_give_remove_segment' );
+
+					$remove_segment_ap = apm_get_option( 'remove_segment_ap' );
+
+					$ss_seg_action = apm_get_option( 'config_give_segment' );
+
+					$ss_seg_action_failed = apm_get_option( 'config_give_segment_failed' );
+
+					$ss_seg_action_refund = apm_get_option( 'config_give_segment_refund' );
+
+					$ss_seg_action_cancel = apm_get_option( 'config_give_segment_cancel' );
+
+					$ss_seg_action_pending = apm_get_option( 'config_give_segment_pending' );
+
+					$ss_seg_action_revoked = apm_get_option( 'config_give_segment_revoked' );
+
+					$ss_seg_action_hold = apm_get_option( 'config_give_segment_ab' );
+
+					$seg_action_form = apm_get_option( 'config_give_segment_form' );
+
+					$give_form = apm_get_option( 'config_give_form' );
 					?>
 					<div class="amp-config-fields">
 						<h4><?php _e( 'Add Users in Segments', 'automateplus-mautic-give' ); ?></h4>
@@ -697,7 +696,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 								<?php APM_RulePanel::select_all_segments( $ss_seg_action ); ?>
 							</div>
 							<p style="margin: 2px;">
-								<input type="checkbox" class="amp-enabled-panels" name="remove_segment_ap" value="" <?php echo $remove_segment_ap; ?> ><?php _e( 'Remove users from all segments', 'automateplus-mautic-give' ); ?>
+								<input type="checkbox" class="amp-enabled-panels" name="remove_segment_ap" value="" <?php checked( 1, $remove_segment_ap ); ?> ><?php _e( 'Remove users from all segments', 'automateplus-mautic-give' ); ?>
 							</p>
 						</p>
 						<p>
@@ -725,7 +724,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 							</div>
 							<p style="margin: 2px;">
 								
-								<input type="checkbox" class="amp-enabled-panels" name="amp_give_proactive_abandoned" value="" <?php echo $proactive_tracking; ?> ><?php _e( 'Enable Proactive Abandonment Tracking', 'automateplus-mautic-give' ); ?>
+								<input type="checkbox" class="amp-enabled-panels" name="amp_give_proactive_abandoned" value="" <?php checked( 1, $proactive_tracking ); ?> ><?php _e( 'Enable Proactive Abandonment Tracking', 'automateplus-mautic-give' ); ?>
 							</p>
 						</p>
 
@@ -748,7 +747,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 							
 							<p style="margin: 2px;">
 								
-								<input type="checkbox" class="amp-enabled-panels" name="apm_give_remove_segment" value="" <?php echo $apm_give_remove_segment; ?> ><?php _e( 'Remove users from all segments', 'automateplus-mautic-give' ); ?>
+								<input type="checkbox" class="amp-enabled-panels" name="apm_give_remove_segment" value="" <?php checked( 1, $apm_give_remove_segment ); ?> ><?php _e( 'Remove users from all segments', 'automateplus-mautic-give' ); ?>
 							</p>
 						</p>
 
@@ -776,20 +775,18 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 
 						<h4><?php _e( 'Give Default Tags', 'automateplus-mautic-give' ); ?></h4>	
 						<p>
-
 							<label>
-								<input type="checkbox" class="amp-enabled-panels" name="amp_give_form_tag" value="" <?php echo $give_form_tag; ?> ><?php _e( 'Automatically add Give form title as a tag in Mautic', 'automateplus-mautic-give' ); ?>
+								<input type="checkbox" class="amp-enabled-panels" name="amp_give_form_tag" value="" <?php checked( 1, $give_form_tag ); ?> ><?php _e( 'Automatically add Give form title as a tag in Mautic', 'automateplus-mautic-give' ); ?>
 							</label><br>
 
 							<label>
-								<input type="checkbox" class="amp-enabled-panels" name="amp_give_gateway" value="" <?php echo $give_gateway; ?> ><?php _e( 'Automatically add Give payment gateway as a tag in Mautic', 'automateplus-mautic-give' ); ?>
+								<input type="checkbox" class="amp-enabled-panels" name="amp_give_gateway" value="" <?php checked( 1, $give_gateway ); ?> ><?php _e( 'Automatically add Give payment gateway as a tag in Mautic', 'automateplus-mautic-give' ); ?>
 							</label><br>
 
 							<label>
-								<input type="checkbox" class="amp-enabled-panels" name="amp_give_payment" value="" <?php echo $give_payment; ?> ><?php _e( 'Automatically add Give payment mode as a tag in Mautic
+								<input type="checkbox" class="amp-enabled-panels" name="amp_give_payment" value="" <?php checked( 1, $give_payment ); ?> ><?php _e( 'Automatically add Give payment mode as a tag in Mautic
 	', 'automateplus-mautic-give' ); ?>
 							</label><br>
-						 
 						</p>
 
 						<p class="submit">
