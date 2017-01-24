@@ -634,7 +634,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 
 			if ( isset( $_COOKIE['mtc_id'] ) ) {
 
-				$contact_id = $_COOKIE['mtc_id'];
+				$contact_id = esc_attr( $_COOKIE['mtc_id'] );
 				$email_cid = AP_Mautic_Api::mautic_get_contact_by_email( $email, $credentials );
 				if ( isset( $email_cid ) ) {
 
