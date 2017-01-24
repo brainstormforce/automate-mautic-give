@@ -72,7 +72,6 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 				// payment status change.
 				add_action( 'give_update_payment_status', array( $this, 'apm_give_status_change' ), 10, 2 );
 
-
 				// Add tab in base plugin.
 				add_action( 'amp_new_options_tab', array( $this, 'render_give_tab' ) );
 				add_action( 'amp_options_tab_content', array( $this, 'render_give_tab_content' ) );
@@ -97,6 +96,12 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 			define( 'AUTOMATEPLUS_MAUTIC_GIVE_URL', plugins_url( '/', __FILE__ ) );
 		}
 
+		/**
+		 * Include give ajax file
+		 *
+		 * @since 1.0.0
+		 * @return void
+		 */
 		public function includes() {
 
 			require_once AUTOMATEPLUS_MAUTIC_GIVE_DIR . 'classes/class-apm-give-ajax.php';
@@ -126,9 +131,9 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 		 * @return void
 		 */
 		public function apm_give_notices() {
-			
+
 			if ( ! class_exists( 'AutomatePlus_Mautic' ) ) {
-        
+
 				$url = network_admin_url() . 'plugin-install.php?s=AutomatePlus+-+Mautic+for+WordPress&tab=search';
 				printf( __( '<div class="update-nag bsf-update-nag">Please install <i><a href="%s">AutomatePlus - Mautic for WordPress</a></i> plugin in order to use Automate Mautic Give.</div>', 'automateplus-mautic-give' ), $url );
 			}
@@ -219,7 +224,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 		public function send_customers( $footer_text ) {
 
 			$screen = get_current_screen();
-      
+
 			if ( 'settings_page_automate-mautic' == $screen->id ) {
 
 				$refresh_text = '<a type="button" name="refresh-mautic" id="send-give-donors" class="refresh-mautic-data"> ';
@@ -719,7 +724,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 
 							</div>
 							<p style="margin: 2px;">
-                
+				
 								<input type="checkbox" class="amp-enabled-panels" name="amp_give_proactive_abandoned" value="" <?php checked( 1, $proactive_tracking ); ?> ><?php _e( 'Enable Proactive Abandonment Tracking', 'automateplus-mautic-give' ); ?>
 
 							</p>
