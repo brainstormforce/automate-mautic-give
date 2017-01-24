@@ -72,6 +72,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 				// payment status change.
 				add_action( 'give_update_payment_status', array( $this, 'apm_give_status_change' ), 10, 2 );
 
+
 				// Add tab in base plugin.
 				add_action( 'amp_new_options_tab', array( $this, 'render_give_tab' ) );
 				add_action( 'amp_options_tab_content', array( $this, 'render_give_tab_content' ) );
@@ -96,12 +97,6 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 			define( 'AUTOMATEPLUS_MAUTIC_GIVE_URL', plugins_url( '/', __FILE__ ) );
 		}
 
-		/**
-		 * Include files
-		 *
-		 * @since 1.0.0
-		 * @return void
-		 */
 		public function includes() {
 
 			require_once AUTOMATEPLUS_MAUTIC_GIVE_DIR . 'classes/class-apm-give-ajax.php';
@@ -131,9 +126,9 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 		 * @return void
 		 */
 		public function apm_give_notices() {
-
+			
 			if ( ! class_exists( 'AutomatePlus_Mautic' ) ) {
-
+        
 				$url = network_admin_url() . 'plugin-install.php?s=AutomatePlus+-+Mautic+for+WordPress&tab=search';
 				printf( __( '<div class="update-nag bsf-update-nag">Please install <i><a href="%s">AutomatePlus - Mautic for WordPress</a></i> plugin in order to use Automate Mautic Give.</div>', 'automateplus-mautic-give' ), $url );
 			}
@@ -224,7 +219,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 		public function send_customers( $footer_text ) {
 
 			$screen = get_current_screen();
-
+      
 			if ( 'settings_page_automate-mautic' == $screen->id ) {
 
 				$refresh_text = '<a type="button" name="refresh-mautic" id="send-give-donors" class="refresh-mautic-data"> ';
@@ -386,7 +381,6 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 					}
 
 					if ( ! empty( $all_customer['add_segment'] ) && 'Select Segment' != $all_customer['add_segment'][0] ) {
-
 						AP_Mautic_Api::ampw_mautic_api_call( $url, $method, $body, $all_customer );
 					}
 					break;
@@ -455,6 +449,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 		 */
 		public function render_give_tab( $active_tab ) {
 		?>	
+
 			<a href="<?php APM_AdminSettings::render_page_url( '&tab=give_mautic' ); ?>" class="nav-tab <?php echo 'give_mautic' == $active_tab ? 'nav-tab-active' : ''; ?>"> <?php _e( 'Give', 'automateplus-mautic-give' ); ?> </a>
 		<?php
 		}
@@ -612,6 +607,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 				foreach ( $segments->lists as $list ) {
 
 					$segment_id = $list->id;
+
 					$action = 'remove';
 					AP_Mautic_Api::mautic_contact_to_segment( $segment_id, $contact_id, $credentials, $action );
 				}
@@ -723,8 +719,9 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 
 							</div>
 							<p style="margin: 2px;">
-								
+                
 								<input type="checkbox" class="amp-enabled-panels" name="amp_give_proactive_abandoned" value="" <?php checked( 1, $proactive_tracking ); ?> ><?php _e( 'Enable Proactive Abandonment Tracking', 'automateplus-mautic-give' ); ?>
+
 							</p>
 						</p>
 
@@ -746,8 +743,9 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 							</div>
 							
 							<p style="margin: 2px;">
-								
+
 								<input type="checkbox" class="amp-enabled-panels" name="apm_give_remove_segment" value="" <?php checked( 1, $apm_give_remove_segment ); ?> ><?php _e( 'Remove users from all segments', 'automateplus-mautic-give' ); ?>
+
 							</p>
 						</p>
 
@@ -799,6 +797,8 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 				<?php
 			}
 		}
+
 	} // end of class
 	add_action( 'plugins_loaded', 'APMautic_Give::instance' );
 endif;
+
