@@ -105,5 +105,5 @@ if ( ! class_exists( 'AutomatePlusGiveAjax' ) ) :
 			wp_send_json_success( $result );
 		}
 	}
-	$automate_give = AutomatePlusGiveAjax::instance();
+	AutomatePlusGiveAjax::instance();
 endif;
