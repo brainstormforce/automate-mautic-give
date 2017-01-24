@@ -248,7 +248,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 			$payment_id = $payment->ID;
 			$status = $payment->post_status;
 
-			$m_tags = $all_forms = array();
+			$m_tags = array();
 
 			$remove_from_all_segment	= false;
 
