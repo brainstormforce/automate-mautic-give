@@ -455,7 +455,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 		public function render_give_tab( $active_tab ) {
 		?>
 
-			<a href="<?php APM_AdminSettings::render_page_url( '&tab=give_mautic' ); ?>" class="nav-tab <?php echo 'give_mautic' == $active_tab ? 'nav-tab-active' : ''; ?>"> <?php _e( 'Give', 'automateplus-mautic-give' ); ?> </a>
+			<a href="<?php APM_AdminSettings::render_page_url( '&tab=give_mautic' ); ?>" class="nav-tab <?php echo 'give_mautic' == $active_tab ? 'nav-tab-active' : ''; ?>"> <?php _e( 'GIVE', 'automateplus-mautic-give' ); ?> </a>
 		<?php
 		}
 
@@ -695,7 +695,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 					<thead>
 					<tr>
 						<td class="row-title"><b><?php esc_attr_e( 'Condition', 'automateplus-mautic-edd' ); ?></b></td>
-						<td><b><?php esc_attr_e( 'Segment', 'automateplus-mautic-edd' ); ?></b></td>
+						<td><b><?php esc_attr_e( 'Add to Segment', 'automateplus-mautic-edd' ); ?></b></td>
 					</tr>
 					</thead>
 					<tbody>
@@ -731,12 +731,12 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 				</table>
 
 				<br class="clear" />
-					<table class="form-table widefat">
+				<table class="form-table widefat">
 					<thead>
 						<tr>
-							<td class="row-title" style="width: 33%;"><b><?php esc_attr_e( 'Condition', 'automateplus-mautic-edd' ); ?></b></td>
-							<td class="row-title" style="width: 33%;"><b><?php esc_attr_e( 'Give Form', 'automateplus-mautic-edd' ); ?></b></td>
-							<td style="width: 33%;"><b><?php esc_attr_e( 'Segment', 'automateplus-mautic-edd' ); ?></b></td>
+							<td class="row-title" style="width: 40%;"><b><?php esc_attr_e( 'Condition', 'automateplus-mautic-edd' ); ?></b></td>
+							<td class="row-title" style="width: 30%;"><b><?php esc_attr_e( 'Give Form', 'automateplus-mautic-edd' ); ?></b></td>
+							<td style="width: 30%;"><b><?php esc_attr_e( 'Add to Segment', 'automateplus-mautic-edd' ); ?></b></td>
 						</tr>
 					</thead>
 					<tbody>
