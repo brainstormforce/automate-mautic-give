@@ -453,9 +453,9 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 		 * @return void
 		 */
 		public function render_give_tab( $active_tab ) {
-		?>	
+		?>
 
-			<a href="<?php APM_AdminSettings::render_page_url( '&tab=give_mautic' ); ?>" class="nav-tab <?php echo 'give_mautic' == $active_tab ? 'nav-tab-active' : ''; ?>"> <?php _e( 'Give', 'automateplus-mautic-give' ); ?> </a>
+			<a href="<?php APM_AdminSettings::render_page_url( '&tab=give_mautic' ); ?>" class="nav-tab <?php echo 'give_mautic' == $active_tab ? 'nav-tab-active' : ''; ?>"> <?php _e( 'GIVE', 'automateplus-mautic-give' ); ?> </a>
 		<?php
 		}
 
@@ -659,147 +659,122 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 
 			if ( 'give_mautic' == $active ) {
 
-					$give_gateway	= apm_get_option( 'amp_give_gateway' );
+				$give_gateway	= apm_get_option( 'amp_give_gateway' );
 
-					$give_payment = apm_get_option( 'amp_give_payment' );
+				$give_payment = apm_get_option( 'amp_give_payment' );
 
-					$give_form_tag	= apm_get_option( 'amp_give_form_tag' );
+				$give_form_tag	= apm_get_option( 'amp_give_form_tag' );
 
-					$proactive_tracking = apm_get_option( 'amp_give_proactive_abandoned' );
+				$proactive_tracking = apm_get_option( 'amp_give_proactive_abandoned' );
 
-					$apm_give_remove_segment = apm_get_option( 'apm_give_remove_segment' );
+				$apm_give_remove_segment = apm_get_option( 'apm_give_remove_segment' );
 
-					$remove_segment_ap = apm_get_option( 'remove_segment_ap' );
+				$remove_segment_ap = apm_get_option( 'remove_segment_ap' );
 
-					$ss_seg_action = apm_get_option( 'config_give_segment' );
+				$ss_seg_action = apm_get_option( 'config_give_segment' );
 
-					$ss_seg_action_failed = apm_get_option( 'config_give_segment_failed' );
+				$ss_seg_action_failed = apm_get_option( 'config_give_segment_failed' );
 
-					$ss_seg_action_refund = apm_get_option( 'config_give_segment_refund' );
+				$ss_seg_action_refund = apm_get_option( 'config_give_segment_refund' );
 
-					$ss_seg_action_cancel = apm_get_option( 'config_give_segment_cancel' );
+				$ss_seg_action_cancel = apm_get_option( 'config_give_segment_cancel' );
 
-					$ss_seg_action_pending = apm_get_option( 'config_give_segment_pending' );
+				$ss_seg_action_pending = apm_get_option( 'config_give_segment_pending' );
 
-					$ss_seg_action_revoked = apm_get_option( 'config_give_segment_revoked' );
+				$ss_seg_action_revoked = apm_get_option( 'config_give_segment_revoked' );
 
-					$ss_seg_action_hold = apm_get_option( 'config_give_segment_ab' );
+				$ss_seg_action_hold = apm_get_option( 'config_give_segment_ab' );
 
-					$seg_action_form = apm_get_option( 'config_give_segment_form' );
+				$seg_action_form = apm_get_option( 'config_give_segment_form' );
 
-					$give_form = apm_get_option( 'config_give_form' );
-					?>
-					<div class="amp-config-fields">
-						<h4><?php _e( 'Add Users in Segments', 'automateplus-mautic-give' ); ?></h4>
-						<p>
-							<label><?php _e( 'After complete donation, add users to:', 'automateplus-mautic-give' ); ?></label>
-							<div class="second-action" style="display:inline;">
-								<?php APM_RulePanel::select_all_segments( $ss_seg_action ); ?>
-							</div>
-							<p style="margin: 2px;">
-								<input type="checkbox" class="amp-enabled-panels" name="remove_segment_ap" value="" <?php checked( 1, $remove_segment_ap ); ?> ><?php _e( 'Remove users from all segments', 'automateplus-mautic-give' ); ?>
-							</p>
-						</p>
-						<p>
-							<label><?php _e( 'Add customer with failed order to:', 'automateplus-mautic-give' ); ?></label>
-							<div class="second-action" style="display:inline;">
-								<?php APM_RulePanel::select_all_segments( $ss_seg_action_failed ); ?>
-							</div>
-						</p>
+				$give_form = apm_get_option( 'config_give_form' );
+				?>
 
-						<p>
-							<label><?php _e( 'Add customer with revoked order to:', 'automateplus-mautic-give' ); ?></label>
-							<div class="second-action" style="display:inline;">
+				<br class="clear" />
+				<table class="form-table widefat">
+					<thead>
+					<tr>
+						<td class="row-title"><b><?php esc_attr_e( 'Condition', 'automateplus-mautic-give' ); ?></b></td>
+						<td><b><?php esc_attr_e( 'Add to Segment', 'automateplus-mautic-give' ); ?></b></td>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td class="row"><?php _e( 'After complete donation, add users to:', 'automateplus-mautic-give' ); ?></td>
+						<td><?php APM_RulePanel::select_all_segments( $ss_seg_action ); ?><input type="checkbox" style="margin-left: 2%;" class="amp-enabled-panels" name="remove_segment_ap" value="" <?php checked( 1, $remove_segment_ap ); ?> ><?php _e( 'Remove users from all segments', 'automateplus-mautic-give' ); ?></td>
+					</tr>
+					<tr>
+						<td class="row"><label for="tablecell"><?php _e( 'Add customer with failed order to:', 'automateplus-mautic-give' ); ?></label></td>
+						<td><?php APM_RulePanel::select_all_segments( $ss_seg_action_failed ); ?></td>
+					</tr>
+					<tr>
+						<td class="row"><?php _e( 'Add customer with revoked order to:', 'automateplus-mautic-give' ); ?></td>
+						<td><?php APM_RulePanel::select_all_segments( $ss_seg_action_revoked ); ?></td>
+					</tr>
+					<tr>
+						<td class="row"><?php _e( 'Add customer with abandoned order to:', 'automateplus-mautic-give' ); ?></td>
+						<td><?php APM_RulePanel::select_all_segments( $ss_seg_action_hold ); ?><input type="checkbox" style="margin-left: 2%;" class="amp-enabled-panels" name="amp_give_proactive_abandoned" value="" <?php checked( 1, $proactive_tracking ); ?> ><?php _e( 'Enable Proactive Abandonment Tracking', 'automateplus-mautic-give' ); ?></td>
+					</tr>
+					<tr>
+						<td class="row"><?php _e( 'Add customer with pending order to:', 'automateplus-mautic-give' ); ?></td>
+						<td><?php APM_RulePanel::select_all_segments( $ss_seg_action_pending ); ?></td>
+					</tr>
+					<tr>
+						<td class="row"><?php _e( 'Add refunded users in:', 'automateplus-mautic-give' ); ?></td>
+						<td><?php APM_RulePanel::select_all_segments( $ss_seg_action_refund ); ?><input type="checkbox" style="margin-left: 2%;" class="amp-enabled-panels" name="apm_give_remove_segment" value="" <?php checked( 1, $apm_give_remove_segment ); ?> ><?php _e( 'Remove users from all segments', 'automateplus-mautic-give' ); ?></td>
+					</tr>
+					<tr>
+						<td class="row"><?php _e( 'Add cancelled donors in:', 'automateplus-mautic-give' ); ?></td>
+						<td><?php APM_RulePanel::select_all_segments( $ss_seg_action_cancel ); ?></td>
+					</tr>
+					</tbody>
+				</table>
 
-								<?php APM_RulePanel::select_all_segments( $ss_seg_action_revoked ); ?>
+				<br class="clear" />
+				<table class="form-table widefat">
+					<thead>
+						<tr>
+							<td class="row-title" style="width: 40%;"><b><?php esc_attr_e( 'Condition', 'automateplus-mautic-give' ); ?></b></td>
+							<td class="row-title" style="width: 30%;"><b><?php esc_attr_e( 'Give Form', 'automateplus-mautic-give' ); ?></b></td>
+							<td style="width: 30%;"><b><?php esc_attr_e( 'Add to Segment', 'automateplus-mautic-give' ); ?></b></td>
+						</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td class="row"><?php _e( 'Add users who donate with specific form', 'automateplus-mautic-give' ); ?></td>
+						<td class="row"><?php APM_RulePanel::select_all_segments( $seg_action_form ); ?></td>
+						<td><?php APM_RulePanel::select_all_segments( $seg_action_form ); ?></td>
+					</tr>
+					</tbody>
+				</table>
 
-							</div>
-						</p>
+				<br class="clear" />
 
-						<p>
-							<label><?php _e( 'Add customer with abandoned order to:', 'automateplus-mautic-give' ); ?></label>
-							<div class="second-action" style="display:inline;">
+				<table class="form-table widefat">
+					<thead>
+						<tr>
+							<td class="row-title"><b><?php esc_attr_e( 'Add Mautic Tags', 'automateplus-mautic-give' ); ?></b></td>
+						</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td class="row"><input type="checkbox" class="amp-enabled-panels" name="amp_give_form_tag" value="" <?php checked( 1, $give_form_tag ); ?> ><?php _e( 'Automatically add Give form title as a tag in Mautic', 'automateplus-mautic-give' ); ?></td>
+					</tr>
+					<tr>
+						<td class="row"><input type="checkbox" class="amp-enabled-panels" name="amp_give_gateway" value="" <?php checked( 1, $give_gateway ); ?> ><?php _e( 'Automatically add Give payment gateway as a tag in Mautic', 'automateplus-mautic-give' ); ?></td>
+					</tr>
+					<tr>
+						<td class="row"><input type="checkbox" class="amp-enabled-panels" name="amp_give_payment" value="" <?php checked( 1, $give_payment ); ?> ><?php _e( 'Automatically add Give payment mode as a tag in Mautic
+', 'automateplus-mautic-give' ); ?></td>
+					</tr>
+					</tbody>
+				</table>
 
-								<?php APM_RulePanel::select_all_segments( $ss_seg_action_hold ); ?>
-
-							</div>
-							<p style="margin: 2px;">
-				
-								<input type="checkbox" class="amp-enabled-panels" name="amp_give_proactive_abandoned" value="" <?php checked( 1, $proactive_tracking ); ?> ><?php _e( 'Enable Proactive Abandonment Tracking', 'automateplus-mautic-give' ); ?>
-
-							</p>
-						</p>
-
-						<p>
-							<label><?php _e( 'Add customer with pending order to:', 'automateplus-mautic-give' ); ?></label>
-							<div class="second-action" style="display:inline;">
-
-								<?php APM_RulePanel::select_all_segments( $ss_seg_action_pending ); ?>
-
-							</div>
-						</p>
-
-						<p>
-							<label><?php _e( 'Add refunded users in:', 'automateplus-mautic-give' ); ?></label>
-							<div class="second-action" style="display:inline;">
-
-								<?php APM_RulePanel::select_all_segments( $ss_seg_action_refund ); ?>
-
-							</div>
-							
-							<p style="margin: 2px;">
-
-								<input type="checkbox" class="amp-enabled-panels" name="apm_give_remove_segment" value="" <?php checked( 1, $apm_give_remove_segment ); ?> ><?php _e( 'Remove users from all segments', 'automateplus-mautic-give' ); ?>
-
-							</p>
-						</p>
-
-						<p>
-							<label><?php _e( 'Add cancelled donors in:', 'automateplus-mautic-give' ); ?></label>
-							
-							<div class="second-action" style="display:inline;">
-
-								<?php APM_RulePanel::select_all_segments( $ss_seg_action_cancel ); ?>
-
-							</div>
-						</p>
-
-						<h4><?php _e( 'Add Users by Give Form', 'automateplus-mautic-give' ); ?></h4>
-
-						<p>
-							<label><?php _e( 'Add users who donate with form ', 'automateplus-mautic-give' ); ?></label>
-						 	
-						 	<?php self::select_all_forms( $give_form ); ?>
-							
-							<label><?php _e( ' to segment ', 'automateplus-mautic-give' ); ?></label>
-							
-							<?php APM_RulePanel::select_all_segments( $seg_action_form ); ?>
-						</p>
-
-						<h4><?php _e( 'Give Default Tags', 'automateplus-mautic-give' ); ?></h4>	
-						<p>
-							<label>
-								<input type="checkbox" class="amp-enabled-panels" name="amp_give_form_tag" value="" <?php checked( 1, $give_form_tag ); ?> ><?php _e( 'Automatically add Give form title as a tag in Mautic', 'automateplus-mautic-give' ); ?>
-							</label><br>
-
-							<label>
-								<input type="checkbox" class="amp-enabled-panels" name="amp_give_gateway" value="" <?php checked( 1, $give_gateway ); ?> ><?php _e( 'Automatically add Give payment gateway as a tag in Mautic', 'automateplus-mautic-give' ); ?>
-							</label><br>
-
-							<label>
-								<input type="checkbox" class="amp-enabled-panels" name="amp_give_payment" value="" <?php checked( 1, $give_payment ); ?> ><?php _e( 'Automatically add Give payment mode as a tag in Mautic
-	', 'automateplus-mautic-give' ); ?>
-							</label><br>
-						</p>
-
-						<p class="submit">
-							<input type="submit" name="save-give-tab" id="save-amp-settings" class="button-primary button button-large" value="<?php esc_attr_e( 'Save Settings', 'automateplus-mautic-give' ); ?>" />
-							<span class="spinner apm-wp-spinner" style="float: none;margin-bottom: 0.5em;"></span>
-						</p>
-						<?php wp_nonce_field( 'ampmauticgive', 'amp-mautic-nonce-give' ); ?>
-
-					</div>
-				<?php
+				<p class="submit">
+					<input type="submit" name="save-give-tab" id="save-amp-settings" class="button-primary button button-large" value="<?php esc_attr_e( 'Save Settings', 'automateplus-mautic-give' ); ?>" />
+					<span class="spinner apm-wp-spinner" style="float: none;margin-bottom: 0.5em;"></span>
+				</p>
+				<?php wp_nonce_field( 'ampmauticgive', 'amp-mautic-nonce-give' );
 			}
 		}
 
