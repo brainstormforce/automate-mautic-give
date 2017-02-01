@@ -742,7 +742,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 					<tbody>
 					<tr>
 						<td class="row"><?php _e( 'Add users who donate with specific form', 'automateplus-mautic-give' ); ?></td>
-						<td class="row"><?php APM_RulePanel::select_all_segments( $seg_action_form ); ?></td>
+						<td class="row"><?php self::select_all_forms( $give_form ); ?></td>
 						<td><?php APM_RulePanel::select_all_segments( $seg_action_form ); ?></td>
 					</tr>
 					</tbody>
