@@ -4,6 +4,8 @@ jQuery(document).ready(function( $ ) {
 
 	jq(document).on( "click", "#send-give-donors", function() {
 
+	    jq( '.amp_footer_spinner' ).removeClass('dashicons dashicons-yes');
+        jq( '.amp_footer_spinner' ).addClass('spinner');
 		jq( '.apm-wp-spinner' ).css( "visibility", "visible" );
 
 		var data= {
@@ -11,11 +13,9 @@ jQuery(document).ready(function( $ ) {
 		};
 
 		jq.post( ajaxurl, data, function(response) {
-			// cosole.log(response);
-			jq( '.apm-wp-spinner' ).removeClass('spinner');
-			jq( '.apm-wp-spinner' ).addClass('dashicons dashicons-yes');
+			
+			jq( '.amp_footer_spinner' ).removeClass('spinner');
+			jq( '.amp_footer_spinner' ).addClass('dashicons dashicons-yes');
 		});
-		
 	});
-
 });
