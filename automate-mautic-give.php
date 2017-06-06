@@ -56,7 +56,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 		 */
 		public function hooks() {
 
-			if ( class_exists( 'Give' ) && class_exists( 'AutomatePlus_Mautic' ) ) {
+			if ( class_exists( 'Give' ) && class_exists( 'APMautic_loader' ) ) {
 
 				self::set_constants();
 				self::includes();
@@ -132,7 +132,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 		 */
 		public function apm_give_notices() {
 
-			if ( ! class_exists( 'AutomatePlus_Mautic' ) ) {
+			if ( ! class_exists( 'APMautic_loader' ) ) {
 
 				$url = network_admin_url() . 'plugin-install.php?s=AutomatePlus+-+Mautic+for+WordPress&tab=search';
 				printf( __( '<div class="update-nag bsf-update-nag">Please install <i><a href="%s">AutomatePlus - Mautic for WordPress</a></i> plugin in order to use Automate Mautic Give.</div>', 'automateplus-mautic-give' ), $url );
@@ -200,18 +200,21 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 			$args = array( 'post_type' => 'give_forms', 'posts_per_page' => -1, 'post_status' => 'publish' );
 			$give_forms = get_posts( $args );
 
-			$all_forms = '<select id="amp-give-forms" class="amp-give-forms form-control" name="sub_give_forms">';
-			$all_forms .= '<option>' . __( 'Select Form', 'automateplus-mautic-give' ) . '</option>';
+			$options = array(
+				'' => __( 'Select Form', 'automateplus-mautic-give' )
+			);
 
 			foreach ( $give_forms as $form ) : setup_postdata( $form );
-
-				$all_forms .= APM_RulePanel::make_option( $form->ID, $form->post_title, $select );
-
-				endforeach;
-
-			$all_forms .= '</select>';
+				$options[ $form->ID ] = $form->post_title;
+			endforeach;
+			APMautic_helper::render_settings_field( 'sub_give_forms', array(
+				'type'			=> 'select',
+				'id'			=> 'amp-give-forms',
+				'class'			=> 'amp-give-forms form-control',
+				'options'		=> $options,
+				'selected'		=> $select,
+			));
 			wp_reset_postdata();
-			echo $all_forms;
 		}
 
 		/**
@@ -356,10 +359,6 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 			// get donor's email.
 			$email = get_post_meta( $payment_id, '_give_payment_user_email', true );
 
-			$api_data = AP_Mautic_Api::get_api_method_url( $email );
-			$url = $api_data['url'];
-			$method = $api_data['method'];
-
 			$body = array(
 				'firstname'	=> $user_info['first_name'],
 				'lastname'	=> $user_info['last_name'],
@@ -376,17 +375,19 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 				$body['tags'] = $m_tags;
 			}
 
+			$instance = APMauticServices::get_service_instance( AP_MAUTIC_SERVICE );
 			switch ( $status ) {
 
 				case 'publish':
 
 					if ( $remove_from_segment_purchase ) {
 
-						self::remove_from_all_segment( $email );
+						$instance->remove_from_all_segment( $email );
 					}
 
 					if ( ! empty( $all_customer['add_segment'] ) && 'Select Segment' != $all_customer['add_segment'][0] ) {
-						AP_Mautic_Api::ampw_mautic_api_call( $url, $method, $body, $all_customer );
+
+						$instance->subscribe( $email, $body, $all_customer );
 					}
 					break;
 
@@ -394,7 +395,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 
 					if ( ! empty( $customer_failed['add_segment'] ) && 'Select Segment' != $customer_failed['add_segment'][0] ) {
 
-						AP_Mautic_Api::ampw_mautic_api_call( $url, $method, $body, $customer_failed );
+						$instance->subscribe( $email, $body, $customer_failed );
 					}
 					break;
 
@@ -402,12 +403,12 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 
 					if ( $remove_from_all_segment ) {
 
-						self::remove_from_all_segment( $email );
+						$instance->remove_from_all_segment( $email );
 					}
 
 					if ( ! empty( $customer_refund['add_segment'] ) && 'Select Segment' != $customer_refund['add_segment'][0] ) {
 
-						AP_Mautic_Api::ampw_mautic_api_call( $url, $method, $body, $customer_refund );
+						$instance->subscribe( $email, $body, $customer_refund );
 					}
 					break;
 
@@ -415,7 +416,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 
 					if ( ! empty( $customer_pending['add_segment'] ) && 'Select Segment' != $customer_pending['add_segment'][0] ) {
 
-						AP_Mautic_Api::ampw_mautic_api_call( $url, $method, $body, $customer_pending );
+						$instance->subscribe( $email, $body, $customer_pending );
 					}
 					break;
 
@@ -423,7 +424,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 
 					if ( ! empty( $customer_revoked['add_segment'] ) && 'Select Segment' != $customer_revoked['add_segment'][0] ) {
 
-						AP_Mautic_Api::ampw_mautic_api_call( $url, $method, $body, $customer_revoked );
+						$instance->subscribe( $email, $body, $customer_revoked );
 					}
 					break;
 
@@ -431,7 +432,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 
 					if ( ! empty( $customer_cancel['add_segment'] ) && 'Select Segment' != $customer_cancel['add_segment'][0] ) {
 
-						AP_Mautic_Api::ampw_mautic_api_call( $url, $method, $body, $customer_cancel );
+						$instance->subscribe( $email, $body, $customer_cancel );
 					}
 					break;
 
@@ -439,7 +440,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 
 					if ( ! empty( $customer_abandoned['add_segment'] ) && 'Select Segment' != $customer_abandoned['add_segment'][0] ) {
 
-						AP_Mautic_Api::ampw_mautic_api_call( $url, $method, $body, $customer_abandoned );
+						$instance->subscribe( $email, $body, $customer_abandoned );
 					}
 					break;
 			}
@@ -449,14 +450,14 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 		 * Add new tab in base plugin
 		 *
 		 * @since 1.0.0
-	  	 * @param string $active_tab active tab.
-		 * @return void
+	  	 * @param string $items active tab.
+		 * @return array
 		 */
-		public function render_give_tab( $active_tab ) {
-		?>
-
-			<a href="<?php APM_AdminSettings::render_page_url( '&tab=give_mautic' ); ?>" class="nav-tab <?php echo 'give_mautic' == $active_tab ? 'nav-tab-active' : ''; ?>"> <?php _e( 'GIVE', 'automateplus-mautic-give' ); ?> </a>
-		<?php
+		public function render_give_tab( $items ) {
+			$items['give_mautic']  = array(
+				'label' => 'GIVE'
+			);
+			return $items;
 		}
 
 		/**
@@ -584,71 +585,6 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 		}
 
 		/**
-		 * Remove contact from all segments
-		 *
-		 * @since 1.0.0
-		 * @static
-	  	 * @param string $email contact email.
-		 * @return void
-		 */
-		public static function remove_from_all_segment( $email ) {
-
-			$contact_id = self::get_mautic_contact_id( $email );
-
-			if ( isset( $contact_id ) ) {
-
-				$url = '/api/contacts/' . $contact_id . '/segments';
-				$method = 'GET';
-
-				$segments = AP_Mautic_Api::ampw_mautic_api_call( $url, $method );
-
-				$credentials = AMPW_Mautic_Init::get_mautic_credentials();
-
-				if ( empty( $segments ) ) {
-
-						return;
-				}
-
-				foreach ( $segments->lists as $list ) {
-
-					$segment_id = $list->id;
-
-					$action = 'remove';
-					AP_Mautic_Api::mautic_contact_to_segment( $segment_id, $contact_id, $credentials, $action );
-				}
-			}
-		}
-
-		/**
-		 * Get Mautic contact ID by email
-		 *
-		 * @since 1.0.0
-		 *
-		 * @static
-		 * @param string $email contact email.
-		 * @return int
-		 */
-		public static function get_mautic_contact_id( $email ) {
-
-			$credentials = AMPW_Mautic_Init::get_mautic_credentials();
-
-			if ( isset( $_COOKIE['mtc_id'] ) ) {
-
-				$contact_id = esc_attr( $_COOKIE['mtc_id'] );
-				$email_cid = AP_Mautic_Api::mautic_get_contact_by_email( $email, $credentials );
-				if ( isset( $email_cid ) ) {
-
-					$contact_id = $email_cid;
-				}
-			} else {
-				$contact_id = AP_Mautic_Api::mautic_get_contact_by_email( $email, $credentials );
-
-			}
-
-			return $contact_id;
-		}
-
-		/**
 		 * Render tab content
 		 *
 		 * @since 1.0.0
@@ -701,31 +637,31 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 					<tbody>
 					<tr>
 						<td class="row"><?php _e( 'After complete donation, add users to:', 'automateplus-mautic-give' ); ?></td>
-						<td><?php APM_RulePanel::select_all_segments( $ss_seg_action ); ?><input type="checkbox" style="margin-left: 2%;" class="amp-enabled-panels" name="remove_segment_ap" value="" <?php checked( 1, $remove_segment_ap ); ?> ><?php _e( 'Remove users from all segments', 'automateplus-mautic-give' ); ?></td>
+						<td><?php APMauticServices::select_all_segments( $ss_seg_action ); ?><input type="checkbox" style="margin-left: 2%;" class="amp-enabled-panels" name="remove_segment_ap" value="" <?php checked( 1, $remove_segment_ap ); ?> ><?php _e( 'Remove users from all segments', 'automateplus-mautic-give' ); ?></td>
 					</tr>
 					<tr>
 						<td class="row"><label for="tablecell"><?php _e( 'Add customer with failed order to:', 'automateplus-mautic-give' ); ?></label></td>
-						<td><?php APM_RulePanel::select_all_segments( $ss_seg_action_failed ); ?></td>
+						<td><?php APMauticServices::select_all_segments( $ss_seg_action_failed ); ?></td>
 					</tr>
 					<tr>
 						<td class="row"><?php _e( 'Add customer with revoked order to:', 'automateplus-mautic-give' ); ?></td>
-						<td><?php APM_RulePanel::select_all_segments( $ss_seg_action_revoked ); ?></td>
+						<td><?php APMauticServices::select_all_segments( $ss_seg_action_revoked ); ?></td>
 					</tr>
 					<tr>
 						<td class="row"><?php _e( 'Add customer with abandoned order to:', 'automateplus-mautic-give' ); ?></td>
-						<td><?php APM_RulePanel::select_all_segments( $ss_seg_action_hold ); ?><input type="checkbox" style="margin-left: 2%;" class="amp-enabled-panels" name="amp_give_proactive_abandoned" value="" <?php checked( 1, $proactive_tracking ); ?> ><?php _e( 'Enable Proactive Abandonment Tracking', 'automateplus-mautic-give' ); ?></td>
+						<td><?php APMauticServices::select_all_segments( $ss_seg_action_hold ); ?><input type="checkbox" style="margin-left: 2%;" class="amp-enabled-panels" name="amp_give_proactive_abandoned" value="" <?php checked( 1, $proactive_tracking ); ?> ><?php _e( 'Enable Proactive Abandonment Tracking', 'automateplus-mautic-give' ); ?></td>
 					</tr>
 					<tr>
 						<td class="row"><?php _e( 'Add customer with pending order to:', 'automateplus-mautic-give' ); ?></td>
-						<td><?php APM_RulePanel::select_all_segments( $ss_seg_action_pending ); ?></td>
+						<td><?php APMauticServices::select_all_segments( $ss_seg_action_pending ); ?></td>
 					</tr>
 					<tr>
 						<td class="row"><?php _e( 'Add refunded users in:', 'automateplus-mautic-give' ); ?></td>
-						<td><?php APM_RulePanel::select_all_segments( $ss_seg_action_refund ); ?><input type="checkbox" style="margin-left: 2%;" class="amp-enabled-panels" name="apm_give_remove_segment" value="" <?php checked( 1, $apm_give_remove_segment ); ?> ><?php _e( 'Remove users from all segments', 'automateplus-mautic-give' ); ?></td>
+						<td><?php APMauticServices::select_all_segments( $ss_seg_action_refund ); ?><input type="checkbox" style="margin-left: 2%;" class="amp-enabled-panels" name="apm_give_remove_segment" value="" <?php checked( 1, $apm_give_remove_segment ); ?> ><?php _e( 'Remove users from all segments', 'automateplus-mautic-give' ); ?></td>
 					</tr>
 					<tr>
 						<td class="row"><?php _e( 'Add cancelled donors in:', 'automateplus-mautic-give' ); ?></td>
-						<td><?php APM_RulePanel::select_all_segments( $ss_seg_action_cancel ); ?></td>
+						<td><?php APMauticServices::select_all_segments( $ss_seg_action_cancel ); ?></td>
 					</tr>
 					</tbody>
 				</table>
@@ -743,7 +679,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 					<tr>
 						<td class="row"><?php _e( 'Add users who donate with specific form', 'automateplus-mautic-give' ); ?></td>
 						<td class="row"><?php self::select_all_forms( $give_form ); ?></td>
-						<td><?php APM_RulePanel::select_all_segments( $seg_action_form ); ?></td>
+						<td><?php APMauticServices::select_all_segments( $seg_action_form ); ?></td>
 					</tr>
 					</tbody>
 				</table>

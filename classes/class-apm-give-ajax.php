@@ -90,17 +90,14 @@ if ( ! class_exists( 'AutomatePlusGiveAjax' ) ) :
 			$customer_ab['add_segment'][0] = $seg_action_ab;
 			$ab_email = isset( $_POST['email'] ) ? sanitize_email( $_POST['email'] ) : '';
 
-			$api_data = AP_Mautic_Api::get_api_method_url( $ab_email );
-			$url = $api_data['url'];
-			$method = $api_data['method'];
-
 			$body = array(
 				'email'		=> $ab_email,
 			);
 
 			if ( ! empty( $customer_ab['add_segment'] ) ) {
 
-				$result = AP_Mautic_Api::ampw_mautic_api_call( $url, $method, $body, $customer_ab );
+				$instance = APMauticServices::get_service_instance( AP_MAUTIC_SERVICE );
+				$result = $instance->subscribe( $ab_email, $body, $customer_ab );
 			}
 			wp_send_json_success( $result );
 		}
