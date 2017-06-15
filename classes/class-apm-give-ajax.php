@@ -2,18 +2,18 @@
 /**
  * Give admin ajax.
  *
- * @package automateplus-mautic-give
+ * @package automate-mautic-give
  * @since 1.0.0
  */
 
-if ( ! class_exists( 'AutomatePlusGiveAjax' ) ) :
+if ( ! class_exists( 'APM_Give_Ajax' ) ) :
 
 	/**
 	 * Initiator
 	 * Create class APMautic_Give
 	 * Handles Ajax operations
 	 */
-	class AutomatePlusGiveAjax {
+	class APM_Give_Ajax {
 
 		/**
 		 * Declare a static variable instance.
@@ -30,7 +30,7 @@ if ( ! class_exists( 'AutomatePlusGiveAjax' ) ) :
 		 */
 		public static function instance() {
 			if ( ! isset( self::$instance ) ) {
-				self::$instance = new AutomatePlusGiveAjax();
+				self::$instance = new APM_Give_Ajax();
 				self::$instance->hooks();
 			}
 			return self::$instance;
@@ -96,11 +96,11 @@ if ( ! class_exists( 'AutomatePlusGiveAjax' ) ) :
 
 			if ( ! empty( $customer_ab['add_segment'] ) ) {
 
-				$instance = APMauticServices::get_service_instance( AP_MAUTIC_SERVICE );
+				$instance = APMautic_Services::get_service_instance( AP_MAUTIC_SERVICE );
 				$result = $instance->subscribe( $ab_email, $body, $customer_ab );
 			}
 			wp_send_json_success( $result );
 		}
 	}
-	AutomatePlusGiveAjax::instance();
+	APM_Give_Ajax::instance();
 endif;
