@@ -570,6 +570,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 
 				$redirect = APMautic_AdminSettings::get_render_page_url( '&tab=give_mautic' );
 				wp_redirect( $redirect );
+				exit();
 			}// End if().
 		}
 
