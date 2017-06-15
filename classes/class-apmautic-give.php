@@ -148,6 +148,11 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 			if ( ( isset( $_REQUEST['page'] ) && 'automate-mautic' == esc_attr( $_REQUEST['page'] ) ) ) {
 
 				wp_enqueue_script( 'apm-give-admin-script', AUTOMATEPLUS_MAUTIC_GIVE_URL . 'assets/js/give-admin.js' , array( 'jquery', 'jquery-ui-sortable', 'wp-util' ) );
+
+				$options = array(
+					'ajax_nonce' => wp_create_nonce( 'apm_give_import_donors' ),
+				);
+				wp_localize_script( 'apm-give-admin-script', 'ApmGiveImport', $options );
 			}
 		}
 
@@ -174,6 +179,7 @@ if ( ! class_exists( 'APMautic_Give' ) ) :
 				$adminajax = admin_url( 'admin-ajax.php' );
 				$select_params = array(
 					'ajax_url'	=> $adminajax,
+					'ajax_nonce' => wp_create_nonce( 'amp_give_proactive_abandoned' ),
 				);
 				wp_enqueue_script( 'give-proactive-ab' , AUTOMATEPLUS_MAUTIC_GIVE_URL . 'assets/js/give-proactive-ab.js', __FILE__ , array( 'jquery' ) );
 				wp_localize_script( 'give-proactive-ab', 'amp_loc', $select_params );

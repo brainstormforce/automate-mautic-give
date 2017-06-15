@@ -8,7 +8,8 @@ jQuery(document).ready( function( $ ) {
 			setTimeout( function(){
 				var data= {
 					action:'add_give_proctive_leads',
-					email: lead
+					email: lead,
+					nonce: amp_loc.ajax_nonce
 				};
 				jQuery.post( amp_loc.ajax_url, data, function(selHtml) {
 					console.log(selHtml);

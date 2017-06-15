@@ -56,9 +56,8 @@ if ( ! class_exists( 'APM_Give_Ajax' ) ) :
 		 * @return void
 		 */
 		public function import_donors_to_mautic() {
-
+			check_ajax_referer( 'apm_give_import_donors', 'nonce' );
 			$obj_payments = new Give_Payments_Query();
-
 			$payments = $obj_payments->get_payments();
 
 			// loop through all donations.
@@ -79,6 +78,7 @@ if ( ! class_exists( 'APM_Give_Ajax' ) ) :
 		 */
 		public function add_proactive_abandoned_leads() {
 
+			check_ajax_referer( 'amp_give_proactive_abandoned', 'nonce' );
 			$seg_action_ab = apm_get_option( 'config_give_segment_ab' );
 
 			// General global config conditions.
