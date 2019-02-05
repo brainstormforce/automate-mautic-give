@@ -1,9 +1,9 @@
 === AutomatePlus - Mautic for Give ===
-Contributors: brainstormforce, rahulwalunje-1
+Contributors: brainstormforce
 Tags: mautic, marketing, automation, donation plugin, give, email
-Donate link: https://www.brainstormforce.com/payment/
+Donate link: https://www.paypal.me/BrainstormForce
 Requires at least: 3.0
-Tested up to: 4.8.1
+Tested up to: 5.0
 Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
